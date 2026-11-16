@@ -571,6 +571,8 @@
           resultsInner.innerHTML = newResultsInner.innerHTML;
           const spinner = document.getElementById("loadSpinner");
           if (spinner) spinner.style.display = 'none';
+          // Take focus out of the search box so Ctrl/Cmd+A selects the whole page.
+          if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
           document.getElementById("scrollTo")?.scrollIntoView({ behavior: 'smooth' });
           const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
           [...tooltipTriggerList].forEach(el => new bootstrap.Tooltip(el));

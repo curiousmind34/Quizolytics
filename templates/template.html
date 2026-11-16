@@ -99,6 +99,23 @@
         console.log(rawString);
       }
 
+      // Ctrl/Cmd+A inside a text box first selects the box's text (normal behaviour);
+      // pressing it again (or in an empty box) selects the whole page for Ctrl/Cmd+C.
+      document.addEventListener('keydown', e => {
+        if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'a') return;
+        const el = document.activeElement;
+        if (!el || !('value' in el) || typeof el.selectionStart !== 'number') return;
+        const all = el.value.length === 0 || (el.selectionStart === 0 && el.selectionEnd === el.value.length);
+        if (!all) return;
+        e.preventDefault();
+        el.blur();
+        const range = document.createRange();
+        range.selectNodeContents(document.body);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      });
+
       {% if data == None %}
         const spinner = document.getElementById("loadSpinner");
         spinner.parentElement.style.display = 'none';
